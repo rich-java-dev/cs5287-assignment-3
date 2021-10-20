@@ -27,6 +27,8 @@ Vagrant.configure("2") do |config|
 	vm1.vm.provision "file", source: "../src/requirements.txt", destination: "~/app/requirements.txt", run: "always"
 	vm1.vm.provision "file", source: "../kafka_2.13-2.8.0.tgz", destination: "~/kafka_2.13-2.8.0.tgz"
 	vm1.vm.provision "file", source: "../src/h2/server.properties", destination: "~/h2/server.properties"
+	vm1.vm.provision "file", source: "h2_script.sh", destination: "~/h2_script.sh"
+	vm1.vm.provision "file", source: "h3_script.sh", destination: "~/h3_script.sh"
 	vm1.vm.provision "file", source: "../src/h3/server.properties", destination: "~/h3/server.properties"
 	vm1.vm.provision "file", source: "../.profile", destination: "~/app/.profile"
 

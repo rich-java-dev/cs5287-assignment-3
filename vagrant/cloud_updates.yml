@@ -42,5 +42,10 @@
     become: yes
     ansible.builtin.shell:
       cmd: apt-get install -y default-jre 
+      
+  - name: disable ufw
+    become: yes
+    ansible.builtin.shell:
+      cmd: ufw disable       
 
 ...
