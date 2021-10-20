@@ -1,0 +1,46 @@
+---
+
+  - name: transfer .profile which will contain some exported env vars
+    copy:
+      src: ~/app/.profile   # here you can give absolute path also.
+      dest: ~/.profile  # destination directory into which this file will get copied.
+
+# fails if running multiple times in a row...
+#  - name: apt-get update on cloud host
+#    ansible.builtin.shell:
+#      cmd: mkdir ~/app
+
+  - name: apt-get update on cloud host
+    become: yes
+    ansible.builtin.shell:
+      cmd: apt-get update
+
+  - name: install pip on cloud host
+    become: yes
+    ansible.builtin.shell:
+      cmd: apt-get install -y python3-pip
+        
+  - name: transfer python requirements to cloud host
+    copy:
+      src: ~/app/requirements.txt   # here you can give absolute path also.
+      dest: ~/app/requirements.txt    # destination directory into which this file will get copied.
+             
+  - name: Install specified python requirements on cloud host
+    pip:
+      requirements: ~/app/requirements.txt
+ 
+  - name: transfer apache kafka requirements to cloud host
+    copy:
+      src: ~/kafka_2.13-2.8.0.tgz   # here you can give absolute path also.
+      dest: ~/kafka_2.13-2.8.0.tgz   # destination directory into which this file will get copied.
+ 
+  - name: unzip apache kafka
+    ansible.builtin.shell:
+      cmd: tar -xvf kafka_2.13-2.8.0.tgz 
+      
+  - name: install java
+    become: yes
+    ansible.builtin.shell:
+      cmd: apt-get install -y default-jre 
+
+...

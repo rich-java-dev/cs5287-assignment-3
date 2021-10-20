@@ -1,0 +1,41 @@
+---
+
+  - name: tear down cloud instance team6-rw3
+    openstack.cloud.server:
+      cloud: openstack
+      name: team6-rw3
+      state: absent
+
+  - name: tear down cloud instance team6-rw4
+    openstack.cloud.server:
+      cloud: openstack
+      name: team6-rw4
+      state: absent  
+
+  - name:  provision cloud instance team6-rw3
+    openstack.cloud.server:
+      cloud: openstack
+      state: present
+      name: team6-rw3
+      image: CC-Ubuntu20.04-20210223
+      key_name: t6-rw1
+      timeout: 200
+      flavor: m1.small
+      network: CH-822922-net
+      floating_ips: 129.114.26.159
+      security_groups: ["SHARED-CLOUDCOMPUTING","default"]
+
+  - name:  provision cloud instance team6-rw4
+    openstack.cloud.server:
+      cloud: openstack
+      state: present
+      name: team6-rw4
+      image: CC-Ubuntu20.04-20210223
+      key_name: t6-rw1
+      timeout: 200
+      flavor: m1.small
+      network: CH-822922-net
+      floating_ips: 129.114.26.114
+      security_groups: ["SHARED-CLOUDCOMPUTING","default"]
+
+...

@@ -1,0 +1,18 @@
+Vagrant and Ansible both had some learning curves associated with each technology.
+
+
+Vagrant:
+
+For starters, the use of Ruby as the primary scripting language threw me into an unfamiliar syntax.
+Fortunately the commands are fairly straight forward to read, however it would have been significantly more challenging without some scaffolding/template to build on.
+Had the Vagrant script file been a flavor of Python or yaml, I feel I would have been able to compose and possibly abstract/encapsulate and group functionality better.
+The other issue I had dealing with the vagrant file was transfering of stastic playbooks to arbitrary locations and running on the remote host.
+To solve this, I kept the file paths simple to ensure consistency.
+Overall, vagrant was pretty useful, but does feel a bit older than say Ansible in its design.
+
+
+Ansible:
+
+Yaml - Yaml Ain't Markup Language has become increasingly popular for a declarative manifest of sorts.
+Ansible's use of yaml in playbooks leads to concise, and direct commands to execute to different inventory groups.
+So far its been pretty nice and easy to work with.

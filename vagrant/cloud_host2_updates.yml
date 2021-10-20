@@ -1,0 +1,18 @@
+---
+
+  - name: transfer apache kafka requirements to cloud host
+    copy:
+      src: ~/h2/server.properties   # here you can give absolute path also.
+      dest: ~/kafka_2.13-2.8.0/config/   # destination directory into which this file will get copied.
+     
+  - name: start apache zookeeper
+    ansible.builtin.shell:
+      cmd: export KAFKA_OPTS="-Djava.net.preferIPv4Stack=True"; nohup bin/zookeeper-server-start.sh config/zookeeper.properties &
+      chdir: ~/kafka_2.13-2.8.0/
+
+  - name: start apache kafka
+    ansible.builtin.shell:
+      cmd: export KAFKA_OPTS="-Djava.net.preferIPv4Stack=True"; nohup bin/kafka-server-start.sh config/server.properties & 
+      chdir: ~/kafka_2.13-2.8.0/
+  
+...

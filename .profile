@@ -1,0 +1,1 @@
+KAFKA_OPTS="-Djava.net.preferIPv4Stack=True"

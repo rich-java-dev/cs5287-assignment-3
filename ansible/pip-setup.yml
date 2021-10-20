@@ -1,0 +1,10 @@
+---
+- name: Install specified python requirements
+  hosts: MyLocalVMs
+  
+  tasks:
+  
+  - name: install requirements.txt
+    pip:
+        requirements: ~/app/requirements.txt
+...

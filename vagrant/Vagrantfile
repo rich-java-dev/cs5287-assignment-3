@@ -1,0 +1,90 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  config.vm.define "vm1" do |vm1|
+  
+	# define some basic properties about the VM we are going to initialize
+    vm1.vm.box = "ubuntu/focal64"
+    vm1.vm.hostname = 'vm1'
+    vm1.vm.box_url = "ubuntu/focal64"
+
+    # give our VM a specific private IP to use w/ NAT
+    vm1.vm.network :private_network, ip: "192.168.56.101"
+
+    vm1.vm.provider :virtualbox do |v|
+      v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+      v.customize ["modifyvm", :id, "--memory", 2048]
+      v.customize ["modifyvm", :id, "--name", "vm1"]
+    end
+	
+	# start by setting up basic directory on newly provisioned host
+	vm1.vm.provision "shell", path: "bootstrap.sh"
+	
+	# transfer over all the necessary files..
+	vm1.vm.provision "file", source: "C:/users/rwhite/.ssh/t6-rw1", destination: "~/.ssh/t6-rw1"
+	vm1.vm.provision "file", source: "../src/Producer.py", destination: "~/app/Producer.py", run: "always"
+	vm1.vm.provision "file", source: "../src/requirements.txt", destination: "~/app/requirements.txt", run: "always"
+	vm1.vm.provision "file", source: "../kafka_2.13-2.8.0.tgz", destination: "~/kafka_2.13-2.8.0.tgz"
+	vm1.vm.provision "file", source: "../src/h2/server.properties", destination: "~/h2/server.properties"
+	vm1.vm.provision "file", source: "../src/h3/server.properties", destination: "~/h3/server.properties"
+	vm1.vm.provision "file", source: "../.profile", destination: "~/app/.profile"
+
+	vm1.vm.provision "file", source: "inventory", destination: "inventory"
+	vm1.vm.provision "file", source: "main.yml", destination: "main.yml"
+	vm1.vm.provision "file", source: "cloud_updates.yml", destination: "cloud_updates.yml"
+	vm1.vm.provision "file", source: "register_cloud_hosts.yml", destination: "register_cloud_hosts.yml"
+	vm1.vm.provision "file", source: "cloud_host2_updates.yml", destination: "cloud_host2_updates.yml"
+	vm1.vm.provision "file", source: "cloud_host3_updates.yml", destination: "cloud_host3_updates.yml"
+	vm1.vm.provision "file", source: "../ansible/.ansible.cfg", destination: "~/.ansible.cfg"
+	vm1.vm.provision "file", source: "C:/users/rwhite/.config/openstack/clouds.yaml", destination: "~/.config/openstack/clouds.yaml"
+	
+	
+	# modify permissions/access on private key such that it is usable for SSH
+	$script = <<-SCRIPT
+	  chmod go-rwx ~/.ssh/t6-rw1
+    SCRIPT
+    vm1.vm.provision "shell", inline: $script, privileged: false
+
+    vm1.vm.provision "ansible_local" do |ansible|
+      ansible.verbose = true
+      ansible.install = true  # installs ansible (and hence python on VM)
+      ansible.limit = "all"
+      ansible.inventory_path = "inventory"  # inventory file
+	  ansible.playbook = "main.yml"
+    end	
+  end
+
+  config.vm.define "vm2" do |vm2|
+    vm2.vm.box = "ubuntu/focal64"
+	
+    vm2.vm.hostname = 'vm2'
+    vm2.vm.box_url = "ubuntu/focal64"
+
+    # give our VM a specific private IP to use w/ NAT
+    vm2.vm.network :private_network, ip: "192.168.56.101"
+
+    vm2.vm.provider :virtualbox do |v|
+      v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+      v.customize ["modifyvm", :id, "--memory", 2048]
+      v.customize ["modifyvm", :id, "--name", "vm2"]
+    end
+	
+	
+		# start by setting up basic directory on newly provisioned host
+	vm2.vm.provision "shell", path: "bootstrap.sh"
+	
+	# transfer over all the necessary files..
+	vm2.vm.provision "file", source: "../src/Producer.py", destination: "~/app/Producer.py", run: "always"
+	vm2.vm.provision "file", source: "../src/requirements.txt", destination: "~/app/requirements.txt", run: "always"
+	
+#	vm2.vm.provision "ansible_local" do |ansible|
+#     ansible.verbose = true
+#     ansible.install = true  # installs ansible (and hence python on VM)
+#     ansible.limit = "all"
+#     ansible.inventory_path = "inventory"  # inventory file
+#     ansible.playbook = "main_vm11.yml"
+#   end
+	
+	end
+end
