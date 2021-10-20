@@ -19,7 +19,7 @@
       name: team6-rw3
       image: CC-Ubuntu20.04-20210223
       key_name: t6-rw1
-      timeout: 200
+      timeout: 600
       flavor: m1.small
       network: CH-822922-net
       floating_ips: 129.114.26.159
@@ -32,7 +32,7 @@
       name: team6-rw4
       image: CC-Ubuntu20.04-20210223
       key_name: t6-rw1
-      timeout: 200
+      timeout: 600
       flavor: m1.small
       network: CH-822922-net
       floating_ips: 129.114.26.114

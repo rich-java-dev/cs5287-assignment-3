@@ -5,12 +5,17 @@
       src: ~/h3/server.properties   # here you can give absolute path also.
       dest: ~/kafka_2.13-2.8.0/config/server.properties   # destination directory into which this file will get copied.
 
+  - name: install CouchDB
+    become: yes
+    ansible.builtin.shell:
+      cmd: sudo apt update && sudo apt install -y curl apt-transport-https gnupg; sudo curl https://couchdb.apache.org/repo/keys.asc | gpg --dearmor | sudo tee /usr/share/keyrings/couchdb-archive-keyring.gpg >/dev/null 2>&1; sudo source /etc/os-release; sudo echo "deb [signed-by=/usr/share/keyrings/couchdb-archive-keyring.gpg] https://apache.jfrog.io/artifactory/couchdb-deb/ ${VERSION_CODENAME} main" | sudo tee /etc/apt/sources.list.d/couchdb.list >/dev/null; sudo apt-get update; sudo apt-get install couchdb -y
+
   - name: start apache kafka
     ansible.builtin.shell:
       cmd: export KAFKA_OPTS="-Djava.net.preferIPv4Stack=True"; nohup bin/kafka-server-start.sh config/server.properties &
       chdir: ~/kafka_2.13-2.8.0/
 
-  - name: pause and wait for zookeeper to start before starting kafka
+  - name: pause and wait for kafka to start before starting the Consumers
     ansible.builtin.shell:
       cmd: sleep 20s
 
@@ -18,10 +23,10 @@
     ansible.builtin.shell:
       cmd: nohup python3 Consumer.py &
       chdir: ~/app
-
+      
   - name: start Consumer2
     ansible.builtin.shell:
       cmd: nohup python3 Consumer.py --topic PLUG &
-      chdir: ~/app
+      chdir: ~/app      
      
 ...

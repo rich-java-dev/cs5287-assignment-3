@@ -5,11 +5,16 @@
       src: ~/app/.profile   # here you can give absolute path also.
       dest: ~/.profile  # destination directory into which this file will get copied.
 
-# fails if running multiple times in a row...
-#  - name: apt-get update on cloud host
-#    ansible.builtin.shell:
-#      cmd: mkdir ~/app
+# mkdir -p makes the command idemponent, or not failing/changing if ran more than once.
+  - name: apt-get update on cloud host
+    ansible.builtin.shell:
+      cmd: mkdir -p ~/app
 
+  - name: transfer Consumer.py
+    copy:
+      src: ~/app/Consumer.py   # here you can give absolute path also.
+      dest: ~/app/Consumer.py   # destination directory into which this file will get copied.
+ 
   - name: apt-get update on cloud host
     become: yes
     ansible.builtin.shell:
@@ -42,6 +47,11 @@
     become: yes
     ansible.builtin.shell:
       cmd: apt-get install -y default-jre 
+
+  - name: install net-tools
+    become: yes
+    ansible.builtin.shell:
+      cmd: apt-get install -y net-tools
       
   - name: disable ufw
     become: yes

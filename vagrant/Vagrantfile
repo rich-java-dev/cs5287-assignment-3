@@ -24,12 +24,13 @@ Vagrant.configure("2") do |config|
 	# transfer over all the necessary files..
 	vm1.vm.provision "file", source: "C:/users/rwhite/.ssh/t6-rw1", destination: "~/.ssh/t6-rw1"
 	vm1.vm.provision "file", source: "../src/Producer.py", destination: "~/app/Producer.py", run: "always"
+	vm1.vm.provision "file", source: "../src/Consumer.py", destination: "~/app/Consumer.py", run: "always"
 	vm1.vm.provision "file", source: "../src/requirements.txt", destination: "~/app/requirements.txt", run: "always"
 	vm1.vm.provision "file", source: "../kafka_2.13-2.8.0.tgz", destination: "~/kafka_2.13-2.8.0.tgz"
 	vm1.vm.provision "file", source: "../src/h2/server.properties", destination: "~/h2/server.properties"
+	vm1.vm.provision "file", source: "../src/h3/server.properties", destination: "~/h3/server.properties"
 	vm1.vm.provision "file", source: "h2_script.sh", destination: "~/h2_script.sh"
 	vm1.vm.provision "file", source: "h3_script.sh", destination: "~/h3_script.sh"
-	vm1.vm.provision "file", source: "../src/h3/server.properties", destination: "~/h3/server.properties"
 	vm1.vm.provision "file", source: "../.profile", destination: "~/app/.profile"
 
 	vm1.vm.provision "file", source: "inventory", destination: "inventory"
@@ -80,13 +81,12 @@ Vagrant.configure("2") do |config|
 	vm2.vm.provision "file", source: "../src/Producer.py", destination: "~/app/Producer.py", run: "always"
 	vm2.vm.provision "file", source: "../src/requirements.txt", destination: "~/app/requirements.txt", run: "always"
 	
-#	vm2.vm.provision "ansible_local" do |ansible|
-#     ansible.verbose = true
-#     ansible.install = true  # installs ansible (and hence python on VM)
-#     ansible.limit = "all"
-#     ansible.inventory_path = "inventory"  # inventory file
-#     ansible.playbook = "main_vm11.yml"
-#   end
 	
+	$script = <<-SCRIPT
+	  sudo apt-get install -y python3-pip
+	  pip install -r ~/app/requirements.txt
+	  nohup python3 ~/app/Producer.py --topic PLUG &
+    SCRIPT
+
 	end
 end

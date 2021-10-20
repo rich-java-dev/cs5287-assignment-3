@@ -16,16 +16,26 @@
 #
 # Provision 2 cloud instances from local VM
 #
-#- name: Provision 2 cloud instances from local VM
-#  collections:   # this is new starting with Ansible 2.9 (akin to importing package)
-#  hosts: MyLocalVMs  
-#    - openstack.cloud
-#
-#  tasks:
-#  - include_tasks: register_cloud_hosts.yml
-#
+- name: Provision 2 cloud instances from local VM
+  collections:   # this is new starting with Ansible 2.9 (akin to importing package)
+  hosts: MyLocalVMs  
+ 
+  tasks:
+   - include_tasks: register_cloud_hosts.yml
 
 
+
+#
+# Wait a few seconds to ensure SSH into cloud host works
+#
+- name: Wait a few seconds to ensure SSH into cloud host works
+  hosts: MyLocalVMs
+  
+  tasks:        
+  - name: wait to ensure cloud host is ready to connect
+    ansible.builtin.shell:
+      cmd: sleep 200s
+      
 #
 # Initial Cloud Host Configuration
 #
@@ -76,7 +86,7 @@
          
   - name: start Producer
     ansible.builtin.shell:
-      cmd: python3 Producer.py &
+      cmd: nohup python3 Producer.py &
       chdir: ~/app
         
         

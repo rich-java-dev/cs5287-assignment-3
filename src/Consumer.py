@@ -14,7 +14,7 @@ parser = argparse.ArgumentParser(
 parser.add_argument('--topic', '-topic', '--t', '-t', default='FCEL',
                     type=str, help='a specific topic (ticker) to register as consumer with')
 
-parser.add_argument('--server', '-server', default='129.114.26.60:9092',
+parser.add_argument('--server', '-server', default='129.114.26.114:9092',
                     help='the kafka server/node to register as consumer with')
 
 parser.add_argument('--couchdb', '-couchdb', '--datastore', '-datastore',  default='http://admin:admin@127.0.0.1:5984/',
