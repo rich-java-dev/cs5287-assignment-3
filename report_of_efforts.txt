@@ -15,4 +15,24 @@ Ansible:
 
 Yaml - Yaml Ain't Markup Language has become increasingly popular for a declarative manifest of sorts.
 Ansible's use of yaml in playbooks leads to concise, and direct commands to execute to different inventory groups.
-So far its been pretty nice and easy to work with.
+So far its been pretty nice and easy to work with...
+
+Updates:
+
+Installing CouchDB was among the hardest parts of the 2nd half of the assignment.
+CouchDB installation was complicated due to the nature of the DPKG interactive prompts which needed to be properly completed.
+To get around this, we used the SNAP image, which greatly simplified the efforts and worked out of the box pretty well.
+
+In addition, the Producers on the local VMs decide to hang up, even when using nohup.
+
+The full pipe-line in 1 sequences works, however the Producers need to be started up again...
+I am not 100% why they are hanging up, but will look into this to clean it up a bit.
+
+There were several files I had coded for a few different approaches, 
+and in the end a few of them are simply not needed anymore.
+I've kept in place for now for general debugging as well as history of the changes...
+
+
+This was a pretty hard project to get working overall, and a few issues with chameleon cloud
+Major issues included: failling to properly schedule or provision a VM, or tear down, and also attempting to SSH into the newest provisioned host without waiting long enough 
+(is variable, but 50 seconds seemedd to work)

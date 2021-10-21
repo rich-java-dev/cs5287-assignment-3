@@ -7,9 +7,10 @@
 
   - name: install CouchDB
     become: yes
+    ignore_errors: yes 
     ansible.builtin.shell:
-      cmd: sudo apt update && sudo apt install -y curl apt-transport-https gnupg; sudo curl https://couchdb.apache.org/repo/keys.asc | gpg --dearmor | sudo tee /usr/share/keyrings/couchdb-archive-keyring.gpg >/dev/null 2>&1; sudo source /etc/os-release; sudo echo "deb [signed-by=/usr/share/keyrings/couchdb-archive-keyring.gpg] https://apache.jfrog.io/artifactory/couchdb-deb/ ${VERSION_CODENAME} main" | sudo tee /etc/apt/sources.list.d/couchdb.list >/dev/null; sudo apt-get update; sudo apt-get install couchdb -y
-
+      cmd: sudo snap install couchdb; sudo snap set couchdb admin=admin; sudo snap start couchdb
+      
   - name: start apache kafka
     ansible.builtin.shell:
       cmd: export KAFKA_OPTS="-Djava.net.preferIPv4Stack=True"; nohup bin/kafka-server-start.sh config/server.properties &
