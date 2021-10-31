@@ -84,10 +84,10 @@ Vagrant.configure("2") do |config|
 	
 	$script = <<-SCRIPT
 	  sudo apt-get install -y python3-pip
-	  pip install -r ~/app/requirements.txt
-	  nohup python3 ~/app/Producer.py --topic PLUG &
+	  pip install -r /home/vagrant/app/requirements.txt
+	  nohup python3 /home/vagrant/app/Producer.py --topic MSFT </dev/null >/dev/null 2>&1 &
     SCRIPT
-    vm2.vm.provision "shell", inline: $script, privileged: true
+    vm2.vm.provision "shell", inline: $script
 
 	end
 end

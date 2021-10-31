@@ -5,8 +5,6 @@
 #
 - name: Install python requirements on local VM
   hosts: MyLocalVMs
-  collections:   # this is new starting with Ansible 2.9 (akin to importing package)
-    - openstack.cloud
 
   tasks:
   - name: Install specified python requirements
@@ -18,9 +16,10 @@
 # Provision 2 cloud instances from local VM
 #
 - name: Provision 2 cloud instances from local VM
+  hosts: MyLocalVMs
   collections:   # this is new starting with Ansible 2.9 (akin to importing package)
-  hosts: MyLocalVMs  
- 
+    - openstack.cloud
+  
   tasks:
    - include_tasks: register_cloud_hosts.yml
 
@@ -51,29 +50,29 @@
 
 
 #
-# Specific Configuration for cloud host 2
+# Specific Configuration for cloud host 1
 #
-- name: Specific Configuration for cloud host 2
+- name: Specific Configuration for cloud host 1
   hosts: MyChameleonKafkaServer 
   remote_user: cc
   collections:   # this is new starting with Ansible 2.9 (akin to importing package)
     - openstack.cloud
 
   tasks:
-  - include_tasks: cloud_host2_updates.yml
+  - include_tasks: cloud_host1_updates.yml
 
 
 #
-# Specific Configuration for cloud host 3
+# Specific Configuration for cloud host 2
 #
-- name: Specific Configuration for cloud host 3
+- name: Specific Configuration for cloud host 2
   hosts: MyChameleonCouchDBServer
   remote_user: cc
   collections:   # this is new starting with Ansible 2.9 (akin to importing package)
     - openstack.cloud
 
   tasks:
-  - include_tasks: cloud_host3_updates.yml
+  - include_tasks: cloud_host2_updates.yml
 
 
 #
@@ -86,7 +85,7 @@
          
   - name: start Producer
     ansible.builtin.shell:
-      cmd: nohup python3 Producer.py &
+      cmd: nohup python3 Producer.py --topic TSLA </dev/null >/dev/null 2>&1 &
       chdir: ~/app
         
         

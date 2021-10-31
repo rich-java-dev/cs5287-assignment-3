@@ -2,21 +2,32 @@
 
   - name: transfer apache kafka requirements to cloud host
     copy:
-      src: ~/h2/server.properties   # here you can give absolute path also.
-      dest: ~/kafka_2.13-2.8.0/config/server.properties  # destination directory into which this file will get copied.
-     
-  - name: start apache zookeeper
-    ansible.builtin.shell:
-      cmd: export KAFKA_OPTS="-Djava.net.preferIPv4Stack=True"; nohup bin/zookeeper-server-start.sh config/zookeeper.properties &
-      chdir: ~/kafka_2.13-2.8.0/
+      src: ~/h3/server.properties   # here you can give absolute path also.
+      dest: ~/kafka_2.13-2.8.0/config/server.properties   # destination directory into which this file will get copied.
 
-  - name: pause and wait for zookeeper to start before starting kafka
+  - name: install CouchDB
+    become: yes
+    ignore_errors: yes 
     ansible.builtin.shell:
-      cmd: sleep 20s
+      cmd: sudo snap install couchdb; sudo snap set couchdb admin=admin; sudo snap start couchdb
       
   - name: start apache kafka
     ansible.builtin.shell:
-      cmd: export KAFKA_OPTS="-Djava.net.preferIPv4Stack=True"; nohup bin/kafka-server-start.sh config/server.properties & 
+      cmd: export KAFKA_OPTS="-Djava.net.preferIPv4Stack=True"; nohup bin/kafka-server-start.sh config/server.properties &
       chdir: ~/kafka_2.13-2.8.0/
-  
+
+  - name: pause and wait for kafka to start before starting the Consumers
+    ansible.builtin.shell:
+      cmd: sleep 20s
+
+  - name: start Consumer1
+    ansible.builtin.shell:
+      cmd: nohup python3 Consumer.py --topic TSLA &
+      chdir: ~/app
+      
+  - name: start Consumer2
+    ansible.builtin.shell:
+      cmd: nohup python3 Consumer.py --topic MSFT &
+      chdir: ~/app      
+     
 ...
