@@ -1,0 +1,14 @@
+---
+
+   - name: update the /etc/hosts aliases
+     blockinfile:
+       path: /etc/hosts
+       block: |
+         129.114.26.59 master-node
+         129.114.26.159 worker-node
+
+   - name: Install Kubernetes on cloud instance
+     ansible.builtin.script:
+       cmd: install_kubernetes.sh
+
+...

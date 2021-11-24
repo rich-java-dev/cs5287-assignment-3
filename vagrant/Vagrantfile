@@ -23,22 +23,18 @@ Vagrant.configure("2") do |config|
 	
 	# transfer over all the necessary files..
 	vm1.vm.provision "file", source: "C:/users/rwhite/.ssh/t6-rw1", destination: "~/.ssh/t6-rw1"
-	vm1.vm.provision "file", source: "../src/Producer.py", destination: "~/app/Producer.py", run: "always"
-	vm1.vm.provision "file", source: "../src/Consumer.py", destination: "~/app/Consumer.py", run: "always"
 	vm1.vm.provision "file", source: "../src/requirements.txt", destination: "~/app/requirements.txt", run: "always"
-	vm1.vm.provision "file", source: "../kafka_2.13-2.8.0.tgz", destination: "~/kafka_2.13-2.8.0.tgz"
 	vm1.vm.provision "file", source: "../src/h2/server.properties", destination: "~/h2/server.properties"
 	vm1.vm.provision "file", source: "../src/h3/server.properties", destination: "~/h3/server.properties"
-	vm1.vm.provision "file", source: "h2_script.sh", destination: "~/h2_script.sh"
-	vm1.vm.provision "file", source: "h3_script.sh", destination: "~/h3_script.sh"
 	vm1.vm.provision "file", source: "../.profile", destination: "~/app/.profile"
 
 	vm1.vm.provision "file", source: "inventory", destination: "inventory"
 	vm1.vm.provision "file", source: "main.yml", destination: "main.yml"
-	vm1.vm.provision "file", source: "cloud_updates.yml", destination: "cloud_updates.yml"
-	vm1.vm.provision "file", source: "register_cloud_hosts.yml", destination: "register_cloud_hosts.yml"
-	vm1.vm.provision "file", source: "cloud_host2_updates.yml", destination: "cloud_host2_updates.yml"
-	vm1.vm.provision "file", source: "cloud_host3_updates.yml", destination: "cloud_host3_updates.yml"
+  
+  vm1.vm.provision "file", source: "install_kubernetes.sh", destination: "install_kubernetes.sh"
+  vm1.vm.provision "file", source: "install_kubernetes.yml", destination: "install_kubernetes.yml"
+  vm1.vm.provision "file", source: "install_kubernetes_master.sh", destination: "install_kubernetes_master.sh"
+
 	vm1.vm.provision "file", source: "../ansible/.ansible.cfg", destination: "~/.ansible.cfg"
 	vm1.vm.provision "file", source: "C:/users/rwhite/.config/openstack/clouds.yaml", destination: "~/.config/openstack/clouds.yaml"
 	
@@ -75,19 +71,7 @@ Vagrant.configure("2") do |config|
 	
 	
 		# start by setting up basic directory on newly provisioned host
-	vm2.vm.provision "shell", path: "bootstrap.sh"
+	# vm2.vm.provision "shell", path: "bootstrap.sh"
 	
-	# transfer over all the necessary files..
-	vm2.vm.provision "file", source: "../src/Producer.py", destination: "~/app/Producer.py", run: "always"
-	vm2.vm.provision "file", source: "../src/requirements.txt", destination: "~/app/requirements.txt", run: "always"
-	
-	
-	$script = <<-SCRIPT
-	  sudo apt-get install -y python3-pip
-	  pip install -r /home/vagrant/app/requirements.txt
-	  nohup python3 /home/vagrant/app/Producer.py --topic MSFT </dev/null >/dev/null 2>&1 &
-    SCRIPT
-    vm2.vm.provision "shell", inline: $script
-
 	end
 end

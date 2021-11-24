@@ -1,33 +1,7 @@
 ---
 
-  - name: transfer apache kafka requirements to cloud host
-    copy:
-      src: ~/h3/server.properties   # here you can give absolute path also.
-      dest: ~/kafka_2.13-2.8.0/config/server.properties   # destination directory into which this file will get copied.
-
-  - name: install CouchDB
-    become: yes
-    ignore_errors: yes 
+  - name: configure k8s worker node
     ansible.builtin.shell:
-      cmd: sudo snap install couchdb; sudo snap set couchdb admin=admin; sudo snap start couchdb
-      
-  - name: start apache kafka
-    ansible.builtin.shell:
-      cmd: export KAFKA_OPTS="-Djava.net.preferIPv4Stack=True"; nohup bin/kafka-server-start.sh config/server.properties &
-      chdir: ~/kafka_2.13-2.8.0/
-
-  - name: pause and wait for kafka to start before starting the Consumers
-    ansible.builtin.shell:
-      cmd: sleep 20s
-
-  - name: start Consumer1
-    ansible.builtin.shell:
-      cmd: nohup python3 Consumer.py &
-      chdir: ~/app
-      
-  - name: start Consumer2
-    ansible.builtin.shell:
-      cmd: nohup python3 Consumer.py --topic PLUG &
-      chdir: ~/app      
+      cmd: hostnamectl set-hostname worker-node
      
 ...

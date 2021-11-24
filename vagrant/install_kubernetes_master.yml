@@ -1,0 +1,11 @@
+---
+
+  - name: configure k8s master node
+    ansible.builtin.shell:
+      cmd: sudo hostnamectl set-hostname master-node
+
+  - name: Install Kubernetes on cloud instance
+    ansible.builtin.script:
+      cmd: install_kubernetes_master.sh
+
+...

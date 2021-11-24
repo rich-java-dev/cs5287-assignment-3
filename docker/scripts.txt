@@ -1,0 +1,20 @@
+docker pull wurstmeister/kafka
+
+kubeadm init --apiserver-advertise-address=129.114.26.59 --pod-network-cidr=10.244.0.0/16  --ignore-preflight-errors=all
+
+
+sudo kubeadm reset
+sudo kubeadm init --node-name master-node --pod-network-cidr=10.244.0.0/16 --ignore-preflight-errors=all
+
+
+
+kubectl taint node mymasternode node-role.kubernetes.io/master:NoSchedule-
+
+
+docker pull wurstmeister/kafka
+
+docker pull zookeeper
+
+
+#kubernetes
+kubectl apply -f kafka-cluster.yaml

@@ -13,6 +13,8 @@
       state: absent  
 
   - name:  provision cloud host 1 instance
+    async: 600
+    poll: 0
     openstack.cloud.server:
       cloud: openstack
       state: present
@@ -23,9 +25,11 @@
       flavor: m1.medium
       network: CH-822922-net
       floating_ips: 129.114.26.59
-      security_groups: ["SHARED-CLOUDCOMPUTING","default"]
+      security_groups: ["SHARED-CLOUDCOMPUTING", "KUBERNETES_PORTS", "default"]
 
   - name:  provision cloud host 2 instance
+    # async: 600 - block/don't run async
+    # poll: 0
     openstack.cloud.server:
       cloud: openstack
       state: present
@@ -36,6 +40,6 @@
       flavor: m1.medium
       network: CH-822922-net
       floating_ips: 129.114.26.159
-      security_groups: ["SHARED-CLOUDCOMPUTING","default"]
+      security_groups: ["SHARED-CLOUDCOMPUTING", "KUBERNETES_PORTS", "default"]
 
 ...

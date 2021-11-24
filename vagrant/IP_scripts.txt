@@ -1,0 +1,42 @@
+kubeadm init --apiserver-advertise-address=129.114.26.59 --pod-network-cidr=10.244.0.0/16  --ignore-preflight-errors=all
+
+
+sudo kubeadm reset
+rm .kube/config
+
+
+# initialize cluster
+sudo kubeadm init --node-name master-node --pod-network-cidr=10.244.0.0/16 --ignore-preflight-errors=all
+
+# configure network
+
+# Calico
+sudo kubectl --kubeconfig=/etc/kubernetes/admin.conf create -f https://docs.projectcalico.org/v3.14/manifests/calico.yaml
+
+#Flannel
+sudo kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/bc79dd1505b0c8681ece4de4c0d86c5cd2643275/Documentation/kube-flannel.yml
+
+
+# create token for other nodes to join cluster
+# sudo kubeadm token create --print-join-command
+
+# taint master node
+sudo kubectl taint node master-node node-role.kubernetes.io/master:NoSchedule-
+
+mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+
+
+
+
+kubectl patch service nginx-service -p '{"spec":{"externalIPs":["129.114.26.59"]}}'
+
+kubectl patch svc nginx-service -p  '{"spec": { "type": "NodePort", "ports": [ { "nodePort": 30001, "port": 80, "protocol": "TCP", "targetPort": 80 } ] } }'
+
+
+
+
+
+kubectl create secret docker-registry regcred --docker-username=rewhite321 --docker-password=Applied4dock3r! --docker-email=therichphysicist@gmail.com
