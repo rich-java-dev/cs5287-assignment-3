@@ -11,13 +11,13 @@ from couchdb import Server
 parser = argparse.ArgumentParser(
     description='Register as consumer to kafka server, recieve and persist stock price data into couchdb')
 
-parser.add_argument('--topic', '-topic', '--t', '-t', default='FCEL',
+parser.add_argument('--topic', '-topic', '--t', '-t', default='MSFT',
                     type=str, help='a specific topic (ticker) to register as consumer with')
 
-parser.add_argument('--server', '-server', default='129.114.26.59:9092',
+parser.add_argument('--server', '-server', default='129.114.26.59:30001',
                     help='the kafka server/node to register as consumer with')
 
-parser.add_argument('--couchdb', '-couchdb', '--datastore', '-datastore',  default='http://admin:admin@127.0.0.1:5984/',
+parser.add_argument('--couchdb', '-couchdb', '--datastore', '-datastore',  default='http://admin:admin@127.0.0.1:31001/',
                     help='the couchdb server to post against')
 
 args = parser.parse_args()

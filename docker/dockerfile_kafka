@@ -1,16 +1,18 @@
-FROM ubuntu:20.04
+# tested w/ 20.04
+FROM ubuntu:latest 
 
-ENV KAFKA_HOME /usr/local/kafka
-ADD ./start-kafka.sh /scripts/
+ENV KAFKA_OPTS -Djava.net.preferIPv4Stack=True
 
-# install java + others
-RUN apt-get update && apt-get install -y \
-  wget \
-  openjdk-8-jdk
+RUN mkdir /kafka
 
-# install kafka
-RUN wget https://dlcdn.apache.org/kafka/3.0.0/kafka_2.13-3.0.0.tgz && \
-  tar -xzf kafka_2.13-3.0.0.tgz && \
-  mv kafka_2.13-3.0.0 $KAFKA_HOME
+# install java runtime
+RUN apt-get -y update && apt-get install -y default-jre
 
-CMD ["/scripts/start-kafka.sh"]
+# transfer, extract, move kafka
+COPY kafka_2.13-2.8.0.tgz /
+RUN  tar -xzf /kafka_2.13-2.8.0.tgz
+RUN  mv kafka_2.13-2.8.0 /kafka
+
+
+
+#CMD ["~/kafka/bin/kafka-server-start.sh","~/kafka/config/server.properties"]  will overload w/ k8s

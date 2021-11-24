@@ -13,7 +13,7 @@ import pandas as pd
 parser = argparse.ArgumentParser(
     description='Look up historic stock data for a given ticket (topic)')
 
-parser.add_argument('--topic', '-topic', '--t', '-t', default='PLUG',
+parser.add_argument('--topic', '-topic', '--t', '-t', default='MSFT',
                     type=str, help='a specific topic (ticker) to look up on ')
 
 parser.add_argument('--start_date', '--start', '-start', '-begin',
@@ -22,7 +22,7 @@ parser.add_argument('--start_date', '--start', '-start', '-begin',
 parser.add_argument('--end_date', '--end', '-end', '--e', '-e',
                     default='2021-09-01', help='ending date for ticker history range')
 
-parser.add_argument('--server', '-server', default='129.114.26.59:9092',
+parser.add_argument('--server', '-server', default='10.1.0.32:30918',
                     help='the kafka server/node to register as publisher against')
 
 args = parser.parse_args()
