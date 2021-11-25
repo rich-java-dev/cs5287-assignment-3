@@ -29,18 +29,14 @@ sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
 
 
-kubectl patch service kafka-broker0 -p '{"spec":{"externalIPs":["129.114.26.59"]}}'
+kubectl patch service kafka-service0 -p '{"spec":{"externalIPs":["129.114.26.59"]}}'
 
-kubectl patch svc nginx-service -p  '{"spec": { "type": "NodePort", "ports": [ { "nodePort": 30001, "port": 9092, "protocol": "TCP", "targetPort": 9092 } ] } }'
+kubectl patch svc kafka-service0 -p  '{"spec": { "type": "NodePort", "ports": [ { "nodePort": 30001, "port": 9092, "protocol": "TCP", "targetPort": 9092 } ] } }'
 
 
 
 kubectl create secret docker-registry regcred --docker-username=rewhite321 --docker-password=Applied4dock3r! --docker-email=therichphysicist@gmail.com
 
 
-
-
 cd /c/vanderbilt/cs5287/cs5287-assignment-3/src
 cd C:\vanderbilt\cs5287\cs5287-assignment-3\src
-
-☺

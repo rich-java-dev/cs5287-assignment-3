@@ -1,16 +1,15 @@
 # tested 20.04
 FROM ubuntu:latest
 
+# copy python Consumer python script and requireinto container image
+COPY requirements.txt /
+COPY Consumer.py /
+
 # Now install the needed python packages
 RUN apt-get -y update && apt-get install -y net-tools python3 gcc
 RUN apt-get install -y python3-dev python3-pip
 RUN python3 -m pip install --upgrade pip
-RUN pip3 install --upgrade numpy
-RUN pip3 install --upgrade pyzmq
+RUN pip3 install -r /requirements.txt
 
-
-# copy our python script into container image
-COPY ../src/Consumer.py /
-
-# Run a command shell (for Swarm and Kubernetes, we comment this out)
-#CMD /bin/bash
+# will overload w/ k8s
+#CMD ["python3","/Consumer.py"]

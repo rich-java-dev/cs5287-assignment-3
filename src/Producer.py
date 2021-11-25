@@ -22,7 +22,7 @@ parser.add_argument('--start_date', '--start', '-start', '-begin',
 parser.add_argument('--end_date', '--end', '-end', '--e', '-e',
                     default='2021-09-01', help='ending date for ticker history range')
 
-parser.add_argument('--server', '-server', default='10.1.0.32:30918',
+parser.add_argument('--server', '-server', default='129.114.26.59:30001',
                     help='the kafka server/node to register as publisher against')
 
 args = parser.parse_args()
