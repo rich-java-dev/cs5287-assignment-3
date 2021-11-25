@@ -1,0 +1,33 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: kafka-broker1
+spec:
+  selector:
+    matchLabels:
+        app: kafka-service1
+  template:
+    metadata:
+      labels:
+        app: kafka-service1
+
+    spec:
+      hostname:
+      nodeSelector:
+        kubernetes.io/hostname: worker-node
+      containers:
+        - name: kafka-broker1
+          image: rewhite321/cc:kafka # this is the image in registry accessible
+                                     # from all our workers
+          imagePullPolicy: Always  # This forces the node to pull the image
+          command:
+          - sh
+          - -c
+          - "exec /kafka/kafka_2.13-2.8.0/bin/kafka-server-start.sh \
+            /kafka/kafka_2.13-2.8.0/config/server.properties \
+            --override broker.id=1 \
+            --override listeners=PLAINTEXT://:9092 \
+            --override advertised.listeners=PLAINTEXT://129.114.26.159:30002 \
+            --override zookeeper.connect=zoo1:2181"
+
+      restartPolicy: Always

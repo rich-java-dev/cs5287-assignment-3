@@ -1,0 +1,39 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: couchdb
+spec:
+  selector:
+    matchLabels:
+        app: couchdb-service
+  template:
+    metadata:
+      labels:
+        app: couchdb-service
+
+    spec:
+      hostname:
+      nodeSelector:
+        kubernetes.io/hostname: worker-node
+      containers:
+        - name: couchdb
+          image: couchdb:2.2.0
+          imagePullPolicy: Always  # This forces the node to pull the image
+          env:
+          - name: NODE_NETBIOS_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          - name: NODENAME
+            value: $(NODE_NETBIOS_NAME).couch-service # FQDN in vm.args
+          - name: COUCHDB_USER
+            value: admin
+          - name: COUCHDB_PASSWORD
+            value: admin
+          - name: COUCHDB_SECRET
+            value: monster
+          - name: ERL_FLAGS
+            value: "-name couchdb@$(NODENAME)"
+          - name: ERL_FLAGS
+            value: "-setcookie monster" #   the “password” used when nodes connect to each other.
+      restartPolicy: Always

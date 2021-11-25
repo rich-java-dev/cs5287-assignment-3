@@ -45,7 +45,7 @@
     ansible.builtin.script:
       cmd: install_kubernetes_master.sh
   - name: k8s cluster token generation
-    ansible.builtin.shell:
+    ansible.builtin.shell: # create token to allow joining k8s cluster
       cmd: sudo kubeadm token create --print-join-command
     register: join_cluster_script
 
@@ -61,21 +61,37 @@
     ansible.builtin.shell:
       cmd: hostnamectl set-hostname worker-node
   - name: worker join k8s cluster
-    ansible.builtin.shell:
+    ansible.builtin.shell: # reference vars from another host/playbook
       cmd: "sudo {{ hostvars['129.114.26.59']['join_cluster_script'].stdout }}"
 
-# #
-# # Run Producer on local VM
-# #
-# - name: Run Producer on local VM
-#   hosts: MyLocalVMs
-  
-#   tasks:
-         
-#   - name: start Producer
-#     ansible.builtin.shell:
-#       cmd: nohup python3 Producer.py --topic TSLA </dev/null >/dev/null 2>&1 &
-#       chdir: ~/app
+# initialize k8s deployments
+- name: initialize k8s deployments from master
+  hosts: K8sMaster
+  remote_user: cc
+  collections:
+    - openstack.cloud
+  tasks:
+  - include_tasks: deploy.yaml
+
+
+# Wait a few seconds to ensure SSH into cloud host works
+- name: Wait a few seconds to ensure SSH into cloud host works
+  hosts: MyLocalVMs
+  tasks:        
+  - name: wait to ensure cloud host is ready to connect
+    ansible.builtin.shell:
+      cmd: sleep 60s
+
+#
+# Run Producer on local VM
+#
+- name: Run Producer on local VM
+  hosts: MyLocalVMs
+  tasks:
+  - name: start Producer
+    ansible.builtin.shell:
+      cmd: nohup python3 Producer.py --topic PLUG </dev/null >/dev/null 2>&1 &
+      chdir: ~/app
         
         
 ...

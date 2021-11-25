@@ -23,21 +23,33 @@ Vagrant.configure("2") do |config|
 	
 	# transfer over all the necessary files..
 	vm1.vm.provision "file", source: "C:/users/rwhite/.ssh/t6-rw1", destination: "~/.ssh/t6-rw1"
-	vm1.vm.provision "file", source: "../src/requirements.txt", destination: "~/app/requirements.txt", run: "always"
-	vm1.vm.provision "file", source: "../src/h2/server.properties", destination: "~/h2/server.properties"
-	vm1.vm.provision "file", source: "../src/h3/server.properties", destination: "~/h3/server.properties"
+	
+  vm1.vm.provision "file", source: "../bkup/zookeeper-svc.yaml", destination: "~/app/zookeeper-svc.yaml", run: "always"
+  vm1.vm.provision "file", source: "../bkup/couchdb-svc.yaml", destination: "~/app/couchdb-svc.yaml", run: "always"
+	vm1.vm.provision "file", source: "../bkup/kafka-svc.yaml", destination: "~/app/kafka-svc.yaml", run: "always"
+	vm1.vm.provision "file", source: "../bkup/kafka-svc2.yaml", destination: "~/app/kafka-svc2.yaml", run: "always"
+	
+	vm1.vm.provision "file", source: "../bkup/zookeeper-deploy.yaml", destination: "~/app/zookeeper-deploy.yaml", run: "always"
+	vm1.vm.provision "file", source: "../bkup/consumer-deploy.yaml", destination: "~/app/consumer-deploy.yaml", run: "always"
+	vm1.vm.provision "file", source: "../bkup/consumer-deploy2.yaml", destination: "~/app/consumer-deploy2.yaml", run: "always"
+	vm1.vm.provision "file", source: "../bkup/couchdb-deploy.yaml", destination: "~/app/couchdb-deploy.yaml", run: "always"
+	vm1.vm.provision "file", source: "../bkup/kafka-deploy.yaml", destination: "~/app/kafka-deploy.yaml", run: "always"
+	vm1.vm.provision "file", source: "../bkup/kafka-deploy2.yaml", destination: "~/app/kafka-deploy2.yaml", run: "always"
+
 	vm1.vm.provision "file", source: "../.profile", destination: "~/app/.profile"
 
 	vm1.vm.provision "file", source: "inventory", destination: "inventory"
 	vm1.vm.provision "file", source: "main.yml", destination: "main.yml"
-  
+
+  vm1.vm.provision "file", source: "deploy.sh", destination: "deploy.sh"
+  vm1.vm.provision "file", source: "deploy.yaml", destination: "deploy.yaml"
+
   vm1.vm.provision "file", source: "install_kubernetes.sh", destination: "install_kubernetes.sh"
   vm1.vm.provision "file", source: "install_kubernetes.yml", destination: "install_kubernetes.yml"
   vm1.vm.provision "file", source: "install_kubernetes_master.sh", destination: "install_kubernetes_master.sh"
 
 	vm1.vm.provision "file", source: "../ansible/.ansible.cfg", destination: "~/.ansible.cfg"
 	vm1.vm.provision "file", source: "C:/users/rwhite/.config/openstack/clouds.yaml", destination: "~/.config/openstack/clouds.yaml"
-	
 	
 	# modify permissions/access on private key such that it is usable for SSH
 	$script = <<-SCRIPT
@@ -69,9 +81,19 @@ Vagrant.configure("2") do |config|
       v.customize ["modifyvm", :id, "--name", "vm2"]
     end
 	
-	
 		# start by setting up basic directory on newly provisioned host
-	# vm2.vm.provision "shell", path: "bootstrap.sh"
+    vm2.vm.provision "shell", path: "bootstrap.sh"
 	
+    # transfer over all the necessary files..
+    vm2.vm.provision "file", source: "../src/Producer.py", destination: "~/app/Producer.py", run: "always"
+    vm2.vm.provision "file", source: "../src/requirements.txt", destination: "~/app/requirements.txt", run: "always"
+    
+    
+    $script = <<-SCRIPT
+      sudo apt-get install -y python3-pip
+      pip install -r /home/vagrant/app/requirements.txt
+      nohup python3 /home/vagrant/app/Producer.py --topic MSFT </dev/null >/dev/null 2>&1 &
+      SCRIPT
+      vm2.vm.provision "shell", inline: $script
 	end
 end

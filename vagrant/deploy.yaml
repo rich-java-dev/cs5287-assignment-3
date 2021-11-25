@@ -1,0 +1,57 @@
+---
+
+  - name: transfer k8s yamls
+    copy:
+      src: ~/app/zookeeper-svc.yaml   # here you can give absolute path also.
+      dest: ~/app/zookeeper-svc.yaml   # destination directory into which this file will get copied.
+
+  - name: transfer k8s yamls
+    copy:
+      src: ~/app/zookeeper-deploy.yaml   # here you can give absolute path also.
+      dest: ~/app/zookeeper-deploy.yaml   # destination directory into which this file will get copied.
+
+      - name: transfer k8s yamls
+    copy:
+      src: ~/app/kafka-svc.yaml   # here you can give absolute path also.
+      dest: ~/app/kafka-svc.yaml   # destination directory into which this file will get copied.
+
+  - name: transfer k8s yamls
+    copy:
+      src: ~/app/kafka-svc2.yaml   # here you can give absolute path also.
+      dest: ~/app/kafka-svc2.yaml   # destination directory into which this file will get copied.
+
+   - name: transfer k8s yamls
+    copy:
+      src: ~/app/kafka-deploy.yaml   # here you can give absolute path also.
+      dest: ~/app/kafka-deploy.yaml   # destination directory into which this file will get copied.
+
+  - name: transfer k8s yamls
+    copy:
+      src: ~/app/kafka-deploy2.yaml   # here you can give absolute path also.
+      dest: ~/app/kafka-deploy2.yaml   # destination directory into which this file will get copied.
+
+  - name: transfer k8s yamls
+    copy:
+      src: ~/app/couchdb-svc.yaml   # here you can give absolute path also.
+      dest: ~/app/couchdb-svc.yaml   # destination directory into which this file will get copied.
+
+  - name: transfer k8s yamls
+    copy:
+      src: ~/app/couchdb-deploy.yaml   # here you can give absolute path also.
+      dest: ~/app/couchdb-deploy.yaml   # destination directory into which this file will get copied.
+
+  - name: transfer k8s yamls
+    copy:
+      src: ~/app/consumer-deploy.yaml   # here you can give absolute path also.
+      dest: ~/app/consumer-deploy.yaml   # destination directory into which this file will get copied.
+
+  - name: transfer k8s yamls
+    copy:
+      src: ~/app/consumer-deploy2.yaml   # here you can give absolute path also.
+      dest: ~/app/consumer-deploy2.yaml   # destination directory into which this file will get copied.
+      
+  - name: initialize k8s deployments from master
+    ansible.builtin.script:
+      cmd: deploy.sh
+
+...

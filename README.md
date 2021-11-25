@@ -1,8 +1,8 @@
 
-# cs5287-assignment-2
-## MessageQueue/DataStore Pipeline using Kafka/CouchDB - Vagrant/Ansible
-### authors: 
-Richard White, Rupak Mohanty
+# cs5287-assignment-3
+## MessageQueue/DataStore Pipeline using Kafka/CouchDB - Vagrant/Ansible/Kubernetes/Docker
+### author: 
+Richard White
 
 ## Intro
 
@@ -14,10 +14,19 @@ There are 4 independent hosts in this system.
 - 2 hosts deployed on cloud (Chameleon) which will server as a multi-node kafka/event stream platform.
 - 1 of the 2 cloud hosts will also act as a database end-point to store data provided by producers.
 
+## Kubernetes 
 
-## Variation from Assignment 1
+Kubernetes (k8s) is a highly scalable and reliable (dependable) deployment management framework.
+Kubernetes allows us to distribute containerized applications seemlessly across a cluster network.
 
-The major differences between assignment 1 and 2, is utilizing Vagrant and Ansible in conjunction to automate the entire pipe-line provisioning, configuration, and execution.
+## Docker
+
+Docker is the de-facto containerization technology, built in order to fully take advantage of linux's namespace isolation features, in an environment that allows utilizing/sharing the underlying host VM's kernel/resources.
+This virtualization strategy creates high performance, fast apps with little overhead, while provided safety and security in terms of isolation from the host its running on (and other app running on the same host). 
+
+## Variation from Assignment 1/2
+
+Building on top of the vagrant VM automation and ansible playbooks to fully automate the entire pipe-line, assignment 3 introduced Docker and Kubernetes as the deployment strategy.
 
 
 ## Running the Project

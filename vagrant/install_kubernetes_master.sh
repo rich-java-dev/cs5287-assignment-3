@@ -11,7 +11,7 @@ sudo kubectl --kubeconfig=/etc/kubernetes/admin.conf create -f https://docs.proj
 # sudo kubeadm token create --print-join-command
 
 # taint master node
-sudo kubectl taint node mymasternode node-role.kubernetes.io/master:NoSchedule-
+sudo kubectl taint master-node node-role.kubernetes.io/master:NoSchedule-
 
 mkdir -p $HOME/.kube
 sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config

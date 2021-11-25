@@ -1,0 +1,25 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: consumer2
+spec:
+  selector:
+    matchLabels:
+      app: consumer2
+
+  template:
+    metadata:
+      labels:
+        app: consumer2
+    spec:
+      hostname: consumer2
+      nodeSelector:
+        kubernetes.io/hostname: worker-node
+      containers:
+        - name: consumer-2
+          image: rewhite321/cc:consumer # this is the image in registry accessible
+                                     # from all our workers
+          imagePullPolicy: Always  # This forces the node to pull the image
+          command: ["python3"]
+          args: ["/Consumer.py","--topic","PLUG", "--couchdb","http://admin:admin@129.114.26.159:31001/"]  # arguments to run.
+      restartPolicy: Always

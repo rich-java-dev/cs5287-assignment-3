@@ -35,7 +35,7 @@ kubectl patch svc kafka-service0 -p  '{"spec": { "type": "NodePort", "ports": [ 
 
 
 
-kubectl create secret docker-registry regcred --docker-username=rewhite321 --docker-password=Applied4dock3r! --docker-email=therichphysicist@gmail.com
+kubectl create secret docker-registry regcred --docker-username=rewhite321 --docker-password=xxxx --docker-email=therichphysicist@gmail.com
 
 
 cd /c/vanderbilt/cs5287/cs5287-assignment-3/src

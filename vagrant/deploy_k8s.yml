@@ -1,7 +1,0 @@
----
-
-  - name: configure k8s master node
-    ansible.builtin.shell:
-      cmd: hostnamectl set-hostname master-node
-
-...
