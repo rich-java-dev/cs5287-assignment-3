@@ -13,6 +13,8 @@ sudo kubectl --kubeconfig=/etc/kubernetes/admin.conf create -f https://docs.proj
 # taint master node
 sudo kubectl taint master-node node-role.kubernetes.io/master:NoSchedule-
 
+# mkdir -p makes the command idemponent, or not failing/changing if ran more than once.
+mkdir -p ~/app
 mkdir -p $HOME/.kube
 sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 sudo chown $(id -u):$(id -g) $HOME/.kube/config

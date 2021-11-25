@@ -23,6 +23,7 @@ Vagrant.configure("2") do |config|
 	
 	# transfer over all the necessary files..
 	vm1.vm.provision "file", source: "C:/users/rwhite/.ssh/t6-rw1", destination: "~/.ssh/t6-rw1"
+	vm1.vm.provision "file", source: "../src/requirements.txt", destination: "~/app/requirements.txt", run: "always"
 	
   vm1.vm.provision "file", source: "../bkup/zookeeper-svc.yaml", destination: "~/app/zookeeper-svc.yaml", run: "always"
   vm1.vm.provision "file", source: "../bkup/couchdb-svc.yaml", destination: "~/app/couchdb-svc.yaml", run: "always"
